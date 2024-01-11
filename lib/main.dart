@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         ),
         home: MyHomePage(),
       ),
@@ -41,6 +41,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     /**
        Scaffold は Flutterフレームワークで使用されるウィジェットの一つで、基本的なアプリケーションの骨格（スケルトン）を提供
@@ -73,13 +74,44 @@ class MyHomePage extends StatelessWidget {
       body: Column(
         children: [
           Text('A random HogeHoge fuga idea:'),
-          Text(appState.current.asLowerCase),
+          BigCard(pair: pair),
           ElevatedButton(
               onPressed: () {
                 appState.getNext();
               },
               child: Text('Next'))
         ],
+      ),
+    );
+  }
+}
+
+class BigCard extends StatelessWidget {
+  const BigCard({
+    super.key,
+    required this.pair,
+  });
+
+  final WordPair pair;
+
+  @override
+  Widget build(BuildContext context) {
+    // アプリの現在のテーマをリクエスト
+    final theme = Theme.of(context);
+
+    // copyWith() を使うと、テキスト スタイルの色以外にも多数のプロパティを変更できる
+    final style = theme.textTheme.displayMedium!
+        .copyWith(color: theme.colorScheme.onPrimary);
+
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          pair.asLowerCase,
+          style: style,
+          semanticsLabel: "${pair.first} ${pair.second}",
+        ),
       ),
     );
   }
