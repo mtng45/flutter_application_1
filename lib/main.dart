@@ -71,35 +71,38 @@ class _MyHomePageState extends State<MyHomePage> {
         throw UnimplementedError('no widget for $selectedIndex');
     }
 
-    return Scaffold(
-        body: Row(
-      children: [
-        // 子がハードウェア ノッチやステータスバーで隠れないようにするもの
-        // モバイル ステータスバーなどで隠されるのを防いでいる
-        SafeArea(
-            child: NavigationRail(
-          extended: false, // true にするとアイコンの隣のラベルが表示
-          destinations: [
-            NavigationRailDestination(
-                icon: Icon(Icons.home), label: Text('Home')),
-            NavigationRailDestination(
-                icon: Icon(Icons.favorite), label: Text('Favorites'))
-          ],
-          selectedIndex: selectedIndex,
-          onDestinationSelected: (value) {
-            setState(() {
-              selectedIndex = value;
-            });
-          },
-        )),
-        // 残りのスペースをできる限り埋める
-        Expanded(
-            child: Container(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          child: page,
-        ))
-      ],
-    ));
+    // LayoutBuilder の builder コールバックは、制約が変化するたびに呼び出され
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+          body: Row(
+        children: [
+          // 子がハードウェア ノッチやステータスバーで隠れないようにするもの
+          // モバイル ステータスバーなどで隠されるのを防いでいる
+          SafeArea(
+              child: NavigationRail(
+            extended: constraints.maxWidth >= 600, // true になるとアイコンの隣のラベルが表示
+            destinations: [
+              NavigationRailDestination(
+                  icon: Icon(Icons.home), label: Text('Home')),
+              NavigationRailDestination(
+                  icon: Icon(Icons.favorite), label: Text('Favorites'))
+            ],
+            selectedIndex: selectedIndex,
+            onDestinationSelected: (value) {
+              setState(() {
+                selectedIndex = value;
+              });
+            },
+          )),
+          // 残りのスペースをできる限り埋める
+          Expanded(
+              child: Container(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: page,
+          ))
+        ],
+      ));
+    });
   }
 }
 
