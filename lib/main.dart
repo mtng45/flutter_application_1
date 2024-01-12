@@ -46,6 +46,11 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearFavorites() {
+    favorites.clear();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -65,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage();
         break;
       case 1:
-        page = Placeholder();
+        page = FavoritesPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -136,6 +141,7 @@ class GeneratorPage extends StatelessWidget {
                   },
                   icon: Icon(icon),
                   label: Text('Like')),
+              SizedBox(width: 10),
               ElevatedButton(
                   onPressed: () {
                     appState.getNext();
@@ -177,5 +183,37 @@ class BigCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var favorites = appState.favorites;
+
+    if (favorites.isEmpty) {
+      return Center(child: Text('No favorites yet.'));
+    }
+
+    return ListView(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text('you have' '${favorites.length} favorites'),
+          ),
+          TextButton(
+              onPressed: (() {
+                appState.clearFavorites();
+              }),
+              child: Text('Clear')),
+        ],
+      ),
+      for (var favorite in favorites)
+        ListTile(
+            leading: Icon(Icons.favorite), title: Text(favorite.asLowerCase)),
+    ]);
   }
 }
