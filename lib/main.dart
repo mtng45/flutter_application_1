@@ -71,16 +71,21 @@ class MyHomePage extends StatelessWidget {
        *  任意の数の子を従え、それらを上から下へ一列に配置
        *  デフォルトでは、その子を上に寄せる
        */
-      body: Column(
-        children: [
-          Text('A random HogeHoge fuga idea:'),
-          BigCard(pair: pair),
-          ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-              },
-              child: Text('Next'))
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BigCard(pair: pair),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  appState.getNext();
+                },
+                child: Text('Next'))
+          ],
+        ),
       ),
     );
   }
