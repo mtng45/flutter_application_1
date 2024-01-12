@@ -14,6 +14,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -25,6 +27,12 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
+
+    // 現在のページのコンテナ。背景色と微妙な切り替えアニメーションが含まれます。
+    var mainArea = ColoredBox(
+        color: colorScheme.surfaceVariant,
+        child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 200), child: page));
 
     // LayoutBuilder の builder コールバックは、制約が変化するたびに呼び出され
     return LayoutBuilder(builder: (context, constraints) {
@@ -45,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
               child: Container(
             color: Theme.of(context).colorScheme.primaryContainer,
-            child: page,
+            child: mainArea,
           ))
         ],
       ));
