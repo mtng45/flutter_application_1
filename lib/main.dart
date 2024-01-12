@@ -35,6 +35,17 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners(); // 監視している MyAppState に通知
   }
+
+  var favorites = <WordPair>[];
+
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -43,27 +54,13 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
-    /**
-       Scaffold は Flutterフレームワークで使用されるウィジェットの一つで、基本的なアプリケーションの骨格（スケルトン）を提供
-       アプリケーションのトップレベルのウィジェットとして使用され、多くの一般的な機能を提供
-       
-       ・AppBar（アプリケーションバー）: 
-        アプリの上部に表示されるバーで、通常はアプリのタイトルやアクションを配置するために使用されます。
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
 
-       ・Body: 
-        アプリケーションのメインコンテンツが配置される領域です。
-        通常は Container や他のウィジェットを使用してレイアウトが構築されます。
-
-       ・FloatingActionButton（浮動アクションボタン）: 
-        通常はアプリケーションの主要なアクションを実行するための円形のボタンです。
-
-       ・BottomNavigationBar（ボトムナビゲーションバー）: 
-        アプリケーションの下部に表示され、複数の画面やセクションにナビゲートするためのボタンを提供します。
-
-       ・Drawer: アプリケーションの左側からスライドインするサイドメニューを表示します。
-
-       ・SnackBar: 画面の一番下に短いメッセージを表示するための小さなウィジェット。
-     */
     return Scaffold(
       /**
        * Column
@@ -79,11 +76,22 @@ class MyHomePage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  appState.getNext();
-                },
-                child: Text('Next'))
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton.icon(
+                    onPressed: () {
+                      appState.toggleFavorite();
+                    },
+                    icon: Icon(icon),
+                    label: Text('Like')),
+                ElevatedButton(
+                    onPressed: () {
+                      appState.getNext();
+                    },
+                    child: Text('Next')),
+              ],
+            )
           ],
         ),
       ),
