@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/main.dart';
+import 'package:namer_app/app/state.dart';
 import 'package:namer_app/widgets/big_card.dart';
 import 'package:provider/provider.dart';
 
