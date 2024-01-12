@@ -1,5 +1,7 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:namer_app/widgets/big_card.dart';
+import 'package:namer_app/widgets/side_navigation.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -84,21 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // 子がハードウェア ノッチやステータスバーで隠れないようにするもの
           // モバイル ステータスバーなどで隠されるのを防いでいる
           SafeArea(
-              child: NavigationRail(
-            extended: constraints.maxWidth >= 600, // true になるとアイコンの隣のラベルが表示
-            destinations: [
-              NavigationRailDestination(
-                  icon: Icon(Icons.home), label: Text('Home')),
-              NavigationRailDestination(
-                  icon: Icon(Icons.favorite), label: Text('Favorites'))
-            ],
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (value) {
-              setState(() {
-                selectedIndex = value;
-              });
-            },
-          )),
+              child: SideNavigation(
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (value) {
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  })),
           // 残りのスペースをできる限り埋める
           Expanded(
               child: Container(
@@ -150,37 +144,6 @@ class GeneratorPage extends StatelessWidget {
             ],
           )
         ],
-      ),
-    );
-  }
-}
-
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
-
-  final WordPair pair;
-
-  @override
-  Widget build(BuildContext context) {
-    // アプリの現在のテーマをリクエスト
-    final theme = Theme.of(context);
-
-    // copyWith() を使うと、テキスト スタイルの色以外にも多数のプロパティを変更できる
-    final style = theme.textTheme.displayMedium!
-        .copyWith(color: theme.colorScheme.onPrimary);
-
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          pair.asLowerCase,
-          style: style,
-          semanticsLabel: "${pair.first} ${pair.second}",
-        ),
       ),
     );
   }
