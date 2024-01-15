@@ -31,6 +31,9 @@ class _HistoryListViewState extends State<HistoryListView> {
         blendMode: BlendMode.dstIn,
         child: AnimatedList(
             key: _key,
+            reverse: true,
+            padding: EdgeInsets.only(top: 100),
+            initialItemCount: appState.history.length,
             itemBuilder: (context, index, animation) {
               final pair = appState.history[index];
               return SizeTransition(
