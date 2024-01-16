@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:namer_app/pages/favorites.dart';
-import 'package:namer_app/pages/generator.dart';
+import 'package:namer_app/views/favorites.dart';
+import 'package:namer_app/views/generator.dart';
 import 'package:namer_app/widgets/side_navigation.dart';
 
 class MyHomePage extends StatefulWidget {
